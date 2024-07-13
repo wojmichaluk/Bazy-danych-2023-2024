@@ -1,0 +1,156 @@
+--tylko podzapytania
+--ogólnie przećwiczyć na co najmniej 2 warianty: 
+--z podzapytaniami i bez
+
+USE Northwind
+
+/*SELECT CompanyName,Phone FROM Customers AS c
+WHERE EXISTS 
+( SELECT * FROM Orders AS o
+WHERE o.CustomerID=c.CustomerID AND EXISTS
+( SELECT * FROM Shippers AS s 
+WHERE s.ShipperID=o.ShipVia
+AND YEAR(ShippedDate) = 1997 
+AND s.CompanyName = 'United Package'))*/
+
+/*SELECT DISTINCT CompanyName, Phone FROM Customers AS c
+WHERE CustomerID IN (SELECT CustomerID FROM Orders
+    WHERE OrderID IN (SELECT OrderID FROM [Order Details]
+        WHERE ProductID IN (SELECT ProductID FROM Products
+            WHERE CategoryID = (SELECT CategoryID FROM Categories
+                WHERE CategoryName='Confections'))))*/
+
+/*SELECT DISTINCT CompanyName, Phone FROM Customers AS c
+WHERE CustomerID NOT IN (SELECT CustomerID FROM Orders
+    WHERE OrderID IN (SELECT OrderID FROM [Order Details]
+        WHERE ProductID IN (SELECT ProductID FROM Products
+            WHERE CategoryID = (SELECT CategoryID FROM Categories
+                WHERE CategoryName='Confections'))))*/
+
+/*SELECT od1.ProductID,
+(SELECT MAX(Quantity) FROM [Order Details] AS od2
+WHERE od1.ProductID=od2.ProductID)
+FROM [Order Details] AS od1
+GROUP BY od1.ProductID*/
+
+/*SELECT p.ProductID,p.ProductName
+FROM Products AS p
+WHERE UnitPrice<
+(SELECT AVG(UnitPrice) FROM Products)*/
+
+/*SELECT p1.ProductID,p1.ProductName
+FROM Products AS p1
+WHERE UnitPrice<
+(SELECT AVG(UnitPrice) FROM Products AS p2
+WHERE p1.CategoryID=p2.CategoryID)*/
+
+/*SELECT p.ProductName,p.UnitPrice,
+(SELECT AVG(UnitPrice) FROM Products) AS Average,
+p.UnitPrice-(SELECT AVG(UnitPrice) FROM Products) 
+AS Delta FROM Products AS p*/
+
+/*SELECT (SELECT CategoryName FROM Categories AS c
+WHERE p1.CategoryID=c.CategoryID) AS CategoryName,
+p1.ProductName,p1.UnitPrice,
+(SELECT AVG(UnitPrice) FROM Products AS p2
+WHERE p1.CategoryID=p2.CategoryID) AS Average,
+p1.UnitPrice-(SELECT AVG(UnitPrice) FROM Products AS p2
+WHERE p1.CategoryID=p2.CategoryID) AS Delta 
+FROM Products AS p1*/
+
+/*SELECT ROUND(SUM(UnitPrice*Quantity*(1-Discount))+
+(SELECT Freight FROM Orders AS o WHERE o.OrderID=10250),2)
+FROM [Order Details] AS od WHERE od.OrderID=10250*/
+
+/*SELECT od.OrderID,ROUND(SUM(UnitPrice*Quantity*(1-Discount))+
+(SELECT Freight FROM Orders AS o WHERE o.OrderID=od.OrderID),2)
+FROM [Order Details] AS od
+GROUP BY od.OrderID*/
+
+/*SELECT Address FROM Customers AS c
+WHERE NOT EXISTS 
+( SELECT * FROM Orders AS o
+WHERE c.CustomerID = o.CustomerID
+AND YEAR(o.OrderDate) = 1997 )*/
+
+/*SELECT (SELECT p.ProductName FROM Products AS p
+WHERE p.ProductID=subquery.ProductID), SUM(people)
+FROM (SELECT od.ProductID, (SELECT COUNT(o.CustomerID)
+FROM Orders AS o WHERE od.OrderID=o.OrderID) AS people
+FROM [Order Details] AS od) AS subquery
+GROUP BY subquery.ProductID
+HAVING SUM(people)>1*/
+
+/*SELECT e.FirstName, e.LastName, 
+ROUND((SELECT(SUM((1 - Discount) * UnitPrice * Quantity))
+FROM [Order Details] AS od
+WHERE od.OrderID IN
+(SELECT o.OrderID FROM Orders AS o
+WHERE o.EmployeeID=e.EmployeeID))+
+(SELECT SUM(Freight) FROM Orders AS o
+WHERE e.EmployeeID=o.EmployeeID),2)
+FROM Employees AS e*/
+
+/*SELECT TOP 1 e.FirstName, e.LastName
+FROM Employees AS e
+ORDER BY ROUND((SELECT(SUM(DISTINCT(1 - Discount) * UnitPrice * Quantity))
+FROM [Order Details] AS od
+WHERE od.OrderID IN
+(SELECT o.OrderID FROM Orders AS o
+WHERE o.EmployeeID=e.EmployeeID AND YEAR(o.OrderDate)=1997)),2) DESC*/
+
+/*SELECT e.FirstName, e.LastName, 
+ROUND((SELECT(SUM((1 - Discount) * UnitPrice * Quantity))
+FROM [Order Details] AS od
+WHERE od.OrderID IN
+(SELECT o.OrderID FROM Orders AS o
+WHERE o.EmployeeID=e.EmployeeID))+
+(SELECT SUM(Freight) FROM Orders AS o
+WHERE e.EmployeeID=o.EmployeeID),2)
+FROM Employees AS e
+WHERE EXISTS
+(SELECT * FROM Employees AS emp
+WHERE e.EmployeeID=emp.ReportsTo)*/
+
+/*SELECT e.FirstName, e.LastName, 
+ROUND((SELECT(SUM((1 - Discount) * UnitPrice * Quantity))
+FROM [Order Details] AS od
+WHERE od.OrderID IN
+(SELECT o.OrderID FROM Orders AS o
+WHERE o.EmployeeID=e.EmployeeID))+
+(SELECT SUM(Freight) FROM Orders AS o
+WHERE e.EmployeeID=o.EmployeeID),2)
+FROM Employees AS e
+WHERE NOT EXISTS
+(SELECT * FROM Employees AS emp
+WHERE e.EmployeeID=emp.ReportsTo)*/
+
+/*SELECT e.FirstName, e.LastName, 
+ROUND((SELECT(SUM((1 - Discount) * UnitPrice * Quantity))
+FROM [Order Details] AS od
+WHERE od.OrderID IN
+(SELECT o.OrderID FROM Orders AS o
+WHERE o.EmployeeID=e.EmployeeID))+
+(SELECT SUM(Freight) FROM Orders AS o
+WHERE e.EmployeeID=o.EmployeeID),2),
+(SELECT MAX(OrderDate) FROM Orders AS o
+WHERE e.EmployeeID=o.EmployeeID)
+FROM Employees AS e
+WHERE EXISTS
+(SELECT * FROM Employees AS emp
+WHERE e.EmployeeID=emp.ReportsTo)*/
+
+/*SELECT e.FirstName, e.LastName, 
+ROUND((SELECT(SUM((1 - Discount) * UnitPrice * Quantity))
+FROM [Order Details] AS od
+WHERE od.OrderID IN
+(SELECT o.OrderID FROM Orders AS o
+WHERE o.EmployeeID=e.EmployeeID))+
+(SELECT SUM(Freight) FROM Orders AS o
+WHERE e.EmployeeID=o.EmployeeID),2),
+(SELECT MAX(OrderDate) FROM Orders AS o
+WHERE e.EmployeeID=o.EmployeeID)
+FROM Employees AS e
+WHERE NOT EXISTS
+(SELECT * FROM Employees AS emp
+WHERE e.EmployeeID=emp.ReportsTo)*/

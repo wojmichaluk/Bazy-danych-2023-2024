@@ -1,0 +1,82 @@
+USE Northwind
+
+/*SELECT ProductName,UnitPrice,Address
+FROM Products AS p INNER JOIN Suppliers AS s
+ON p.SupplierID = s.SupplierID
+INNER JOIN Categories as c
+ON p.CategoryID = c.CategoryID
+WHERE CategoryName = 'Meat/Poultry' 
+AND UnitPrice BETWEEN 20 AND 30*/
+
+/*SELECT ProductName,UnitPrice,CompanyName
+FROM Products AS p INNER JOIN Suppliers AS s
+ON p.SupplierID = s.SupplierID
+INNER JOIN Categories as c
+ON p.CategoryID = c.CategoryID
+WHERE CategoryName = 'Confections'*/
+
+/*SELECT DISTINCT c.CompanyName,c.Phone
+FROM Customers AS c INNER JOIN Orders AS o
+ON c.CustomerID = o.CustomerID
+AND YEAR(ShippedDate) = 1997
+INNER JOIN Shippers as s
+ON o.ShipVia = s.ShipperID
+WHERE s.CompanyName = 'United Package'*/
+
+/*SELECT DISTINCT c.CompanyName,c.Phone
+FROM Customers AS c INNER JOIN Orders AS o
+ON c.CustomerID = o.CustomerID
+INNER JOIN [Order Details] as od
+ON o.OrderID = od.OrderID
+INNER JOIN Products as p
+ON od.ProductID = p.ProductID
+INNER JOIN Categories AS cat
+ON p.CategoryID = cat.CategoryID
+WHERE CategoryName = 'Confections'*/
+
+USE library
+
+/*SELECT firstname,lastname,birth_date,street+', '+city as Address
+FROM juvenile as j INNER JOIN member as m
+ON j.member_no=m.member_no
+INNER JOIN adult as a ON j.adult_member_no=a.member_no*/
+
+/*SELECT m.firstname,m.lastname,j.birth_date,a.street+', '+a.city as Address,ma.firstname,ma.lastname
+FROM member as m INNER JOIN juvenile as j
+ON j.member_no=m.member_no
+INNER JOIN adult as a ON a.member_no=j.adult_member_no
+INNER JOIN member AS ma ON ma.member_no=a.member_no*/
+
+USE Northwind
+
+/*SELECT b.EmployeeID,b.FirstName+' '+b.LastName,a.EmployeeID,a.FirstName+' '+a.LastName
+FROM Employees AS a JOIN Employees as b
+ON a.ReportsTo=b.EmployeeID*/
+
+/*SELECT b.EmployeeID,b.FirstName+' '+b.LastName
+FROM Employees AS a RIGHT OUTER JOIN Employees as b
+ON a.ReportsTo=b.EmployeeID
+WHERE a.EmployeeID IS NULL*/
+
+USE library
+
+/*SELECT DISTINCT a.street+', '+a.city 
+FROM adult AS a INNER JOIN juvenile AS j
+ON j.adult_member_no=a.member_no
+AND j.birth_date<'1/1/96'*/
+
+/*SELECT DISTINCT a.street+', '+a.city 
+FROM adult AS a INNER JOIN juvenile AS j
+ON j.adult_member_no=a.member_no
+LEFT OUTER JOIN loan as l ON a.member_no=l.member_no
+WHERE YEAR(j.birth_date)<1996 AND (isbn IS NULL OR due_date>GETDATE())*/
+
+USE joindb
+
+/*SELECT c.buyer_name AS buyer1,e.prod_name,d.buyer_name AS buyer2
+FROM Sales AS a JOIN Sales AS b
+ON a.prod_id = b.prod_id
+JOIN Buyers AS c ON c.buyer_id = a.buyer_id
+JOIN Buyers AS d ON d.buyer_id = b.buyer_id
+JOIN Produce AS e ON e.prod_id = a.prod_id
+WHERE a.buyer_id < b.buyer_id*/

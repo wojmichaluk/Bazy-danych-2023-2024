@@ -1,0 +1,100 @@
+USE Northwind
+
+/*SELECT COUNT(*)
+FROM Products
+WHERE UnitPrice NOT BETWEEN 10 AND 20*/
+
+/*SELECT MAX(UnitPrice)
+FROM Products
+WHERE UnitPrice < 20*/
+
+/*SELECT MAX(UnitPrice) AS 'Max',MIN(UnitPrice) AS 'Min',AVG(UnitPrice) AS 'Avg'
+FROM Products
+WHERE QuantityPerUnit LIKE '%bottle%'*/
+
+/*SELECT *
+FROM Products
+WHERE UnitPrice > 28.8663*/
+lub
+/*SELECT *
+FROM Products
+WHERE UnitPrice > (SELECT AVG(UnitPrice) FROM Products)*/
+
+/*SELECT SUM((1-Discount)*UnitPrice*Quantity)
+FROM [Order Details]
+WHERE OrderID = 10250*/
+
+/*SELECT OrderID,MAX(UnitPrice) AS MaxPrice
+FROM [Order Details]
+GROUP BY OrderID*/
+
+/*SELECT OrderID,MAX(UnitPrice) AS MaxPrice
+FROM [Order Details]
+GROUP BY OrderID
+ORDER BY 2*/
+
+/*SELECT OrderID,MAX(UnitPrice) AS MaxPrice,MIN(UnitPrice) AS MinPrice
+FROM [Order Details]
+GROUP BY OrderID*/
+
+/*SELECT ShipVia,COUNT(OrderID)
+FROM Orders
+GROUP BY ShipVia*/
+
+/*SELECT TOP 1 ShipVia,COUNT(OrderID)
+FROM Orders
+WHERE YEAR(ShippedDate) = 1997
+GROUP BY ShipVia
+ORDER BY 2 DESC*/
+
+/*SELECT OrderID, COUNT(ProductID) AS No_Positions
+FROM [Order Details]
+GROUP BY OrderID
+HAVING COUNT(ProductID) > 5*/
+
+/*SELECT CustomerID,COUNT(*) AS No_Orders,SUM(Freight) AS Cost
+FROM Orders
+WHERE YEAR(ShippedDate) = 1998
+GROUP BY CustomerID
+HAVING COUNT(*) > 8
+ORDER BY Cost DESC*/
+
+--rozdzielenie Rollup na 3 komendy, zamiast
+/*SELECT ProductID,OrderID,SUM(Quantity) AS TotalQuantity
+FROM orderhist
+GROUP BY ProductID,OrderID
+WITH ROLLUP
+ORDER BY 1,2*/
+
+SELECT Null,Null,SUM(Quantity) AS TotalQuantity
+FROM orderhist
+
+SELECT ProductID,Null,SUM(Quantity) AS TotalQuantity
+FROM orderhist
+GROUP BY ProductID
+ORDER BY 1
+
+SELECT ProductID,OrderID,SUM(Quantity) AS TotalQuantity
+FROM orderhist
+GROUP BY ProductID,OrderID
+ORDER BY 1,2
+
+/*SELECT COUNT(*)
+FROM Orders
+WHERE ShippedDate > RequiredDate*/
+
+/*SELECT EmployeeID,COUNT(*),MAX(OrderDate)
+FROM Orders
+GROUP BY EmployeeID
+ORDER BY 2*/
+
+USE library
+
+/*SELECT COUNT(*),YEAR(birth_date) AS Year,MONTH(birth_date) AS Month
+FROM juvenile
+GROUP BY YEAR(birth_date),MONTH(birth_date)*/
+
+/*SELECT member_no,COUNT(*) 
+FROM loan
+GROUP BY member_no
+ORDER BY 2 DESC*/

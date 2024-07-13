@@ -1,0 +1,191 @@
+USE Northwind
+
+/*SELECT (firstname + ' ' + lastname) AS name,city, postalcode,'P'
+FROM employees
+UNION ALL
+SELECT companyname, city, postalcode,'K'
+FROM customers*/
+
+/*SELECT (firstname + ' ' + lastname) AS name,city, postalcode,'P'
+FROM employees
+INTERSECT
+SELECT companyname, city, postalcode,'K'
+FROM customers*/
+
+/*SELECT (firstname + ' ' + lastname) AS name,city, postalcode,'P'
+FROM employees
+EXCEPT
+SELECT companyname, city, postalcode,'K'
+FROM customers*/
+
+USE library
+
+/*SELECT firstname + ' ' + lastname AS name,
+street + ' ' + city + ' ' + state + ' ' + zip AS address
+FROM adult AS a JOIN member AS m
+ON a.member_no = m.member_no*/
+
+/*SELECT i.isbn, copy_no, on_loan, title, translation, cover
+FROM item AS i JOIN copy AS c
+ON i.title_no = c.title_no
+AND i.isbn = c.isbn
+JOIN title AS t on t.title_no = c.title_no
+WHERE i.isbn = 1 OR i.isbn = 500 OR i.isbn = 1000
+ORDER BY i.isbn*/
+
+/*SELECT m.member_no, firstname, lastname, isbn, log_date
+FROM member AS m JOIN reservation AS r
+ON m.member_no = r.member_no
+WHERE m.member_no = 250 OR m.member_no = 342 OR m.member_no = 1675*/
+
+/*SELECT m.member_no, firstname + ' ' + lastname AS name
+FROM member AS m JOIN adult AS a
+ON m.member_no = a.member_no
+JOIN juvenile AS j 
+ON j.adult_member_no = a.member_no
+WHERE state = 'AZ'
+GROUP BY m.member_no, firstname, lastname
+HAVING COUNT(j.member_no) > 2*/
+
+/*SELECT m.member_no, firstname + ' ' + lastname AS name
+FROM member AS m JOIN adult AS a
+ON m.member_no = a.member_no
+JOIN juvenile AS j 
+ON j.adult_member_no = a.member_no
+WHERE state = 'AZ'
+GROUP BY m.member_no, firstname, lastname
+HAVING COUNT(j.member_no) > 2
+UNION
+SELECT m.member_no, firstname + ' ' + lastname AS name
+FROM member AS m JOIN adult AS a
+ON m.member_no = a.member_no
+JOIN juvenile AS j 
+ON j.adult_member_no = a.member_no
+WHERE state = 'CA'
+GROUP BY m.member_no, firstname, lastname
+HAVING COUNT(j.member_no) > 3*/
+
+--alternatywnie bez union
+/*SELECT m.member_no, firstname + ' ' + lastname AS name
+FROM member AS m JOIN adult AS a
+ON m.member_no = a.member_no
+JOIN juvenile AS j 
+ON j.adult_member_no = a.member_no
+GROUP BY m.member_no, firstname, lastname,state
+HAVING (COUNT(j.member_no) > 2 AND state = 'AZ') OR (COUNT(j.member_no) > 3 AND state = 'CA')*/
+
+USE Northwind
+
+/*SELECT o.OrderID, SUM(Quantity), CompanyName
+FROM Orders as o JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+JOIN Customers AS c ON o.CustomerID = c.CustomerID
+GROUP BY o.OrderID, CompanyName*/
+
+/*SELECT o.OrderID, SUM(Quantity), CompanyName
+FROM Orders as o JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+JOIN Customers AS c ON o.CustomerID = c.CustomerID
+GROUP BY o.OrderID, CompanyName
+HAVING SUM(Quantity) > 250*/
+
+/*SELECT o.OrderID, ROUND(SUM((1 - Discount) * UnitPrice * Quantity),2) AS 'Wartosc', CompanyName
+FROM Orders as o JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+JOIN Customers AS c ON o.CustomerID = c.CustomerID
+GROUP BY o.OrderID, CompanyName*/
+
+/*SELECT o.OrderID, ROUND(SUM((1 - Discount) * UnitPrice * Quantity),2) AS 'Wartosc', CompanyName
+FROM Orders as o JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+JOIN Customers AS c ON o.CustomerID = c.CustomerID
+GROUP BY o.OrderID, CompanyName
+HAVING SUM(Quantity) > 250*/
+
+/*SELECT o.OrderID, ROUND(SUM((1 - Discount) * UnitPrice * Quantity),2) AS 'Wartosc', CompanyName, FirstName, LastName
+FROM Orders as o JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+JOIN Customers AS c ON o.CustomerID = c.CustomerID
+JOIN Employees AS e ON o.EmployeeID = e.EmployeeID
+GROUP BY o.OrderID, CompanyName, FirstName, LastName
+HAVING SUM(Quantity) > 250*/
+
+/*SELECT CategoryName, SUM(Quantity)
+FROM Categories AS c JOIN Products AS p
+ON c.CategoryID = p.CategoryID
+JOIN [Order Details] AS od ON p.ProductID = od.ProductID
+GROUP BY CategoryName*/
+
+/*SELECT CategoryName, ROUND(SUM((1 - Discount) * od.UnitPrice * Quantity),2) AS 'Wartosc'
+FROM Categories AS c JOIN Products AS p
+ON c.CategoryID = p.CategoryID
+JOIN [Order Details] AS od ON p.ProductID = od.ProductID
+GROUP BY CategoryName*/
+
+/*SELECT CategoryName, ROUND(SUM((1 - Discount) * od.UnitPrice * Quantity),2) AS 'Wartosc'
+FROM Categories AS c JOIN Products AS p
+ON c.CategoryID = p.CategoryID
+JOIN [Order Details] AS od ON p.ProductID = od.ProductID
+GROUP BY CategoryName
+ORDER BY 2 DESC*/
+
+/*SELECT CategoryName, ROUND(SUM((1 - Discount) * od.UnitPrice * Quantity),2) AS 'Wartosc'
+FROM Categories AS c JOIN Products AS p
+ON c.CategoryID = p.CategoryID
+JOIN [Order Details] AS od ON p.ProductID = od.ProductID
+GROUP BY CategoryName
+ORDER BY SUM(Quantity) DESC*/
+
+/*SELECT o.OrderID, ROUND(SUM((1 - Discount) * UnitPrice * Quantity) + Freight, 2) AS 'Wartosc z oplata'
+FROM Orders as o JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+GROUP BY o.OrderID, Freight*/
+
+/*SELECT CompanyName, COUNT(OrderID)
+FROM Shippers AS s JOIN Orders AS o
+ON s.ShipperID = o.ShipVia
+WHERE YEAR(ShippedDate) = 1997
+GROUP BY CompanyName*/
+
+/*SELECT TOP 1 CompanyName, COUNT(OrderID)
+FROM Shippers AS s JOIN Orders AS o
+ON s.ShipperID = o.ShipVia
+WHERE YEAR(ShippedDate) = 1997
+GROUP BY CompanyName
+ORDER BY 2 DESC*/
+
+/*SELECT FirstName, LastName, ROUND(SUM((1 - Discount) * UnitPrice * Quantity),2) AS 'Wartosc'
+FROM Orders as o JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+JOIN Employees AS e ON o.EmployeeID = e.EmployeeID
+GROUP BY FirstName, LastName*/
+
+/*SELECT TOP 1 FirstName, LastName
+FROM Orders as o JOIN Employees AS e 
+ON o.EmployeeID = e.EmployeeID
+WHERE YEAR(OrderDate) = 1997
+GROUP BY FirstName, LastName
+ORDER BY COUNT(o.OrderID) DESC*/
+
+/*SELECT TOP 1 e.FirstName, e.LastName,ROUND(SUM(DISTINCT(1 - Discount) * UnitPrice * Quantity),2) AS Value
+FROM Employees AS e
+INNER JOIN Orders AS o ON e.EmployeeID=o.EmployeeID
+INNER JOIN [Order Details] AS od ON o.OrderID=od.OrderID
+WHERE YEAR(OrderDate)=1997
+GROUP BY e.FirstName,e.LastName,e.EmployeeID
+ORDER BY 3 DESC*/
+
+/*SELECT DISTINCT e.FirstName, e.LastName, ROUND(SUM(od.Quantity * od.UnitPrice * (1-Discount)),2) AS Value
+FROM Employees AS e INNER JOIN Employees AS emp
+ON e.EmployeeID=emp.ReportsTo
+INNER JOIN Orders AS o ON e.EmployeeID=o.EmployeeID
+INNER JOIN [Order Details] AS od ON o.OrderID=od.OrderID
+GROUP BY e.FirstName,e.LastName,e.EmployeeID,emp.FirstName,emp.EmployeeID*/
+
+/*SELECT e.FirstName, e.LastName, ROUND(SUM(od.Quantity * od.UnitPrice * (1-Discount)),2) AS Value
+FROM Employees AS e LEFT OUTER JOIN Employees AS emp
+ON e.EmployeeID=emp.ReportsTo
+INNER JOIN Orders AS o ON e.EmployeeID=o.EmployeeID
+INNER JOIN [Order Details] AS od ON o.OrderID=od.OrderID
+WHERE emp.EmployeeID IS NULL
+GROUP BY e.FirstName,e.LastName,e.EmployeeID*/
