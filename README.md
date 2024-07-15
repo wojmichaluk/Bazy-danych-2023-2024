@@ -8,4 +8,6 @@ Wyjątkiem są pierwsze zajęcia, na których było tylko omówienie struktury b
 
 Z kolei w katalogu ```kolokwia``` znajduje się parę plików **.sql**, które zawierają moje próby rozwiązywania kolosów z poprzednich lat oraz to, co wysłałem w ramach mojego kolosa (za co, jak głosi nazwa pliku, dostałem zawrotne 1 na 3 punkty). Niestety nie mam dokładnej treści zadań.
 
+Projekt, który realizowałem wraz z kolegami [Konradem](https://github.com/karmatys8) oraz [Kubą](https://github.com/JakubWorek) jest umieszczony pod adresem [Projekt](https://github.com/wojmichaluk/PBD-Projekt) (oraz sforkowany przeze mnie). Został on oceniony na 10/10 punktów.
+
 Oczywiście rozwiązania zadań mogą zawierać błędy, nieuzupełnione sekcje itd., ale w większości powinny być uzupełnione, a przede wszystkim mam nadzieję, że są przydatne. Korzystajcie rozważnie!
